@@ -1,0 +1,500 @@
+{
+	"info": {
+		"_postman_id": "58dd3dce-34ec-4f6d-94ea-b700543e8575",
+		"name": "pizza-management-system",
+		"description": "Solicitudes HTTP realizadas, para el este caso se usó el gestor mysql, para ello se debe crear una base de datos con el nombre \"pizza_system\" luego iniciar el proyecto con el comando: **npm run start:dev**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35975128"
+	},
+	"item": [
+		{
+			"name": "Insertar producto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"code\": 1289,\r\n   \"name\": \"Gaseosa\",\r\n   \"price\" : 20,\r\n   \"unit\" : 21,\r\n   \"tax\" : 0.6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/product",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product"
+					]
+				},
+				"description": "Insertar producto a través del método POST\n\nDefinimos los tipos de objeto que se recibirán y se guardarán\n\n``` javascript\nexport class createProductDto{\n    code:number\n    name:string\n    price:number\n    unit:number\n    tax:number\n}\n\n ```\n\nRecibimos los datos desde el cliente\n\n``` javascript\n@Post()\ncreateProduct(@Body() newProduct:createProductDto){\n    return this.productsService.createProduct(newProduct);\n}\n\n ```\n\nEstablecemos los campos de la base de datos\n\n``` javascript\nexport class Product{\n    @PrimaryGeneratedColumn()//Genera el id de forma automática\n    id:number\n    @Column({unique:true})\n    code:number\n    @Column()\n    name:string\n    @Column({type:'decimal', precision:10, scale:2})//Tipo de dato con valor decimal\n    price:number\n    @Column()\n    unit:number \n    @Column({type:'decimal', precision:10, scale:2})\n    tax:number\n}\n\n ```\n\nInsertamos el registro en la base de datos\n\n``` javascript\nasync createProduct(product:createProductDto){    \nconst newProduct = this.productRepository.create(product);\n    this.productRepository.save(newProduct);\n};\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Insertar un producto repetido",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"code\": 1289,\r\n   \"name\": \"Refresco sabor banana\",\r\n   \"price\" : 15,\r\n   \"unit\" : 30,\r\n   \"tax\" : 0.10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/product",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product"
+					]
+				},
+				"description": "Se detecta que el nuevo producto a ingresar no tenga un código repetido, en caso contrario se retorna error 400, y el mensaje indicando que el producto ya existe:\n\n``` javascript\nconst productFound = await this.productRepository.findOne({\n    where:{\n        code: product.code\n     }\n });\nif(productFound){\n   return new HttpException('Este código producto ya existe',400)\n}\n\n ```"
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/product",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "126"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7e-Dic721REzVbgkhtZVCly6L78HCA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jun 2024 01:55:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"response\": \"Este código producto ya existe\",\n    \"status\": 400,\n    \"message\": \"Este código producto ya existe\",\n    \"name\": \"HttpException\"\n}"
+				},
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"code\": 1289,\r\n   \"name\": \"Refresco sabor banana\",\r\n   \"price\" : 15,\r\n   \"unit\" : 30,\r\n   \"tax\" : 0.10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/product",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "126"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7e-Dic721REzVbgkhtZVCly6L78HCA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jun 2024 01:55:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"response\": \"Este código producto ya existe\",\n    \"status\": 400,\n    \"message\": \"Este código producto ya existe\",\n    \"name\": \"HttpException\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Listar productos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/product",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product"
+					]
+				},
+				"description": "Listar a través del método GET los productos existentes"
+			},
+			"response": [
+				{
+					"name": "Listar productos",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/product",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "415"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"19f-/wSUr49gZ78DNlGbgflA96QZGd8\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jun 2024 01:48:02 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"code\": 1011,\n        \"name\": \"Test Product\",\n        \"price\": \"120.15\",\n        \"unit\": 10,\n        \"tax\": \"0.15\"\n    },\n    {\n        \"id\": 2,\n        \"code\": 1012,\n        \"name\": \"Pizza Suprema\",\n        \"price\": \"150.20\",\n        \"unit\": 15,\n        \"tax\": \"0.20\"\n    },\n    {\n        \"id\": 4,\n        \"code\": 1013,\n        \"name\": \"Pizza hawaiana\",\n        \"price\": \"140.00\",\n        \"unit\": 10,\n        \"tax\": \"0.15\"\n    },\n    {\n        \"id\": 5,\n        \"code\": 1212,\n        \"name\": \"Pizza Peperoni\",\n        \"price\": \"140.00\",\n        \"unit\": 12,\n        \"tax\": \"0.10\"\n    },\n    {\n        \"id\": 7,\n        \"code\": 1289,\n        \"name\": \"Gaseosa\",\n        \"price\": \"20.00\",\n        \"unit\": 21,\n        \"tax\": \"0.60\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Obtener un producto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/product/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product",
+						"2"
+					]
+				},
+				"description": "Obtener los detalles de un producto a través de su id:\n\n``` javascript\ngetProduct(id:number){return this.productRepository.findOne({\n    where: {\n       id\n    }\n  });\n}\n\n ```"
+			},
+			"response": [
+				{
+					"name": "Obtener un producto",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/product/2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "83"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"53-mJ4iTeXijBOqaFfR00U1sHdQXv4\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jun 2024 02:15:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 2,\n    \"code\": 1012,\n    \"name\": \"Pizza Suprema\",\n    \"price\": \"150.20\",\n    \"unit\": 15,\n    \"tax\": \"0.20\"\n}"
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar datos del producto",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Pizza Vegetariana\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/product/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product",
+						"2"
+					]
+				},
+				"description": "Para actualizar los datos del producto se recibe como parámetro el id del mismo"
+			},
+			"response": [
+				{
+					"name": "Actualizar datos del producto",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Pizza Vegetariana\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/product/2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a-mp76xueJwuBg6SC3F/3HJjTMrec\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jun 2024 02:26:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"generatedMaps\": [],\n    \"raw\": [],\n    \"affected\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "Eliminar producto",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/product/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Eliminar producto",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/product/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "23"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"17-PVQD/E0HAqMH9FRBYNXdIixTtCA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jun 2024 02:34:25 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"raw\": [],\n    \"affected\": 1\n}"
+				}
+			]
+		}
+	]
+}

@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 
 import { ProductModule } from './product/product.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ClientsController } from './clients/clients.controller';
+import { UsersController } from './users/users.controller';
 
 
 
@@ -21,7 +23,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
         synchronize:true,
       })
     ],
-  controllers: [AppController],
+  controllers: [AppController, ClientsController, UsersController],
   providers: [AppService],
 })
 export class AppModule {}
